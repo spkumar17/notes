@@ -185,3 +185,58 @@ terraform apply
 ```
 **Reminder**
 we need to define environment variable  `$env:TF_LOG` every time when session get expire.
+
+## Count Meta-Argument
+count is a meta-argument in Terraform that is used to create multiple instances of a resource or module based on a condition or a variable. It controls how many instances of a resource should be created.
+
+### When to Use count:
+* When you need to create multiple instances of a resource.
+* When you want to conditionally create a resource based on some variable or condition.
+* When you need to dynamically control the number of resources based on some list or map.
+
+**Basic example**
+```
+resource "aws_instance" "example" {
+  count = 3
+
+  ami           = "ami-0c55b159cbfafe1f0"
+  instance_type = "t2.micro"
+
+  tags = {
+    Name = "example-instance-${count.index}"
+  }
+}
+```
+### 2. Conditional Resource Creation:
+
+Using count with a conditional expression to control whether or not a resource should be created:
+
+```
+variable "create_instance" {
+  default = true
+}
+
+resource "aws_instance" "example" {
+  count = var.create_instance ? 1 : 0  # If true, 1 instance will be created; otherwise, 0.
+
+  ami           = "ami-0c55b159cbfafe1f0"
+  instance_type = "t2.micro"
+}
+```
+
+### 3.Dynamic Resource Creation with List Length:
+You can also use count to dynamically create resources based on a list's length:
+```
+variable "availability_zones" {
+  default = ["us-west-1a", "us-west-1b", "us-west-1c"]
+}
+
+resource "aws_subnet" "example" {
+  count = length(var.availability_zones)
+
+  vpc_id            = "vpc-123456"
+  cidr_block        = "10.0.${count.index}.0/24"
+  availability_zone = var.availability_zones[count.index]
+}
+```
+The number of subnets created will depend on the number of availability zones provided in the list.
