@@ -146,4 +146,10 @@ terraform apply -var-file=prod.tfvars
 
 Based on the Workspace we are in infrastructure will be created and State will be updated in the respective state file. 
 
+## Terraform state locking:
 
+Terraform state locking using DynamoDB is essential in preventing concurrent operations that can corrupt the Terraform state. When multiple users or processes attempt to run terraform apply or terraform plan simultaneously, locking ensures that only one process can modify the state at a time.
+
+**Example**:
+
+You are managing a Terraform configuration that provisions AWS infrastructure (like EC2 instances, S3 buckets, etc.). Multiple team members are working on the infrastructure, and they could potentially run Terraform commands simultaneously, which might cause conflicts or corrupt the state. To prevent this, you implement state locking using a DynamoDB table.
