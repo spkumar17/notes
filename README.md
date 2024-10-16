@@ -177,7 +177,7 @@ terraform destroy
 $env:TF_LOG = "ERROR"
 terraform destroy or apply
 ```
-We can store this logs in files using `$env:TF_LOG_PATH= /path` environmental variable
+We can store this logs in file using `$env:TF_LOG_PATH= /path` environmental variable
 ```
 $env:TF_LOG = "ERROR"
 $env:TF_LOG_PATH = "./logs/terraform.log"  # use this variable to store the logs.
