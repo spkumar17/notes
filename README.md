@@ -153,3 +153,35 @@ Terraform state locking using DynamoDB is essential in preventing concurrent ope
 **Example**:
 
 You are managing a Terraform configuration that provisions AWS infrastructure (like EC2 instances, S3 buckets, etc.). Multiple team members are working on the infrastructure, and they could potentially run Terraform commands simultaneously, which might cause conflicts or corrupt the state. To prevent this, you implement state locking using a DynamoDB table.
+
+## Enabling tf_logs:
+
+Terraform provides the `TF_LOG` environment variable for controlling log verbosity. You can choose from different levels like `TRACE`, `DEBUG`, `INFO`, `WARN`, and `ERROR`.
+
+**Example**:
+#### 1.Set TF_LOG for detailed trace logs:
+```
+powershell:
+
+$env:TF_LOG = "TRACE"
+terraform destroy or apply
+
+linux:
+TF_LOG="TRACE"
+terraform destroy
+```
+
+#### 2.Set TF_LOG for error-level logging:
+
+```
+$env:TF_LOG = "ERROR"
+terraform destroy or apply
+```
+We can store this logs in files using `$env:TF_LOG_PATH= /path` environmental variable
+```
+$env:TF_LOG = "ERROR"
+$env:TF_LOG_PATH = "./logs/terraform.log"  # use this variable to store the logs.
+terraform apply
+```
+**Reminder**
+we need to define environment variable  `$env:TF_LOG` every time when session get expire.
