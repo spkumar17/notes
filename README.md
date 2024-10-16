@@ -116,4 +116,34 @@ Sometimes, implicit dependencies aren’t enough. For example, if we want the **
 - **Example:**  
   A **NAT Gateway** should only be created after a **Route Table** has been established. If the NAT Gateway is created before the route table, it won’t function as expected. This is where **explicit dependencies** come into play using `depends_on`.
 
+## Terraform WorkSpaces:
+
+Terraform workspaces provide a way to manage different environments like` DEV , UAT , PROD ` within the same Terraform configuration. They help maintain multiple copies of the infrastructure without needing separate directories or configuration files.
+
+Need to deploy the infrastructure for each environment using the appropriate `.tfvars` file.
+
+First need to create Workspaces to have different State files.
+```
+terraform workspace new DEV
+terraform workspace new UAT
+terraform workspace new PROD
+```
+List the workspace using the below command
+
+`terraform workspace list`
+
+Then Switch to required Workspace and create the infrastructure using the .tfvar file
+```
+terraform workspace select DEV
+terraform apply -var-file=dev.tfvars
+
+terraform workspace select UAT
+terraform apply -var-file=uat.tfvars
+
+terraform workspace select PROD
+terraform apply -var-file=prod.tfvars
+```
+
+Based on the Workspace we are in infrastructure will be created and State will be updated in the respective state file. 
+
 
