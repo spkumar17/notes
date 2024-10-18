@@ -154,6 +154,12 @@ Terraform state locking using DynamoDB is essential in preventing concurrent ope
 
 You are managing a Terraform configuration that provisions AWS infrastructure (like EC2 instances, S3 buckets, etc.). Multiple team members are working on the infrastructure, and they could potentially run Terraform commands simultaneously, which might cause conflicts or corrupt the state. To prevent this, you implement state locking using a DynamoDB table.
 
+## Terraform Modules
+
+Terraform, modules are reusable blocks of code. They allow you to group related infrastructure resources and reuse that configuration across multiple projects.
+
+A module is essentially a directory that contains .tf files defining resources, variables, outputs, and optionally, input variables and outputs. By encapsulating infrastructure configurations within modules, you can write them once and reuse them many times, making your Terraform code more modular, manageable, and consistent.
+
 ## Enabling tf_logs:
 
 Terraform provides the `TF_LOG` environment variable for controlling log verbosity. You can choose from different levels like `TRACE`, `DEBUG`, `INFO`, `WARN`, and `ERROR`.
