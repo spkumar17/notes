@@ -1,3 +1,4 @@
+
 #                                                                                  Terraform
 
 ## What is Terraform?
@@ -192,6 +193,18 @@ terraform apply
 **Reminder**
 we need to define environment variable  `$env:TF_LOG` every time when session get expire.
 
+## Index
+this fetch the value from the list of elements.
+**Example**
+```
+variable "AZ" {
+    type = "string"
+}
+
+AZ = ["us-east-1a", "us-east-1b", "us-east-1c"]
+
+index value: [0,               1,              2]
+```
 ## Count Meta-Argument
 count is a meta-argument in Terraform that is used to create multiple instances of a resource or module based on a condition or a variable. It controls how many instances of a resource should be created.
 
@@ -240,9 +253,146 @@ variable "availability_zones" {
 resource "aws_subnet" "example" {
   count = length(var.availability_zones)
 
-  vpc_id            = "vpc-123456"
+  vpc_id            = "vpc-123456" 
   cidr_block        = "10.0.${count.index}.0/24"
   availability_zone = var.availability_zones[count.index]
 }
 ```
 The number of subnets created will depend on the number of availability zones provided in the list.
+
+## Element Function
+element retrieves a single element from a list.
+
+`element(list, index)`
+
+**example:**
+
+```
+variable "AZ" {
+  type    = list(string)
+  default = ["us-west-1a", "us-west-1b", "us-west-1c"]
+}
+
+element(var.AZ,${count.index})
+```
+Every time it iterate it will fetch a value from the list of AZ's
+
+
+The index is zero-based. This function produces an error if used with an empty list. The index must be a non-negative integer.
+
+## Splat Function:
+
+splat expression is a shorthand way to extract values from a list or set of resources in Terraform.
+
+**Example:**
+
+Let's say you create multiple subnets using the count meta-argument
+```
+resource "aws_subnet" "public-subnet" {
+  count             = length(var.public_cidr_block)
+  vpc_id            = aws_vpc.default.id
+  cidr_block        = element(var.public_cidr_block, count.index)
+  availability_zone = element(var.azs, count.index)
+}
+```
+Here, 3 subnet instances are being created, each with a different CIDR block. Each subnet will have its own attributes, like id, arn, etc.
+
+### Using Splat Expression to Extract IDs:
+```
+output "subnet_ids" {
+  value = aws_subnet.example.*.id  # Using the splat expression to collect all subnet IDs
+}
+
+output:
+
+subnet_ids = [
+  "subnet-abc123",
+  "subnet-def456",
+  "subnet-ghi789"
+]
+
+```
+###  How to associate subnets to route table using splat:
+**Creating a Route Table:**
+
+You create a route table resource:
+```
+resource "aws_route_table" "public" {
+  vpc_id = aws_vpc.main.id
+
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_internet_gateway.main.id
+  }
+}
+```
+### Using Splat Expression for Route Table Associations:
+
+To associate all the created subnets with this route table, you can use a splat expression to gather all the subnet IDs and create associations for each one. This is where splat expressions come in handy.
+
+```
+resource "aws_route_table_association" "public_association" {
+  count          = length(aws_subnet.public.*.id)
+  subnet_id      = element(aws_subnet.public.*.id, count.index)
+  route_table_id = aws_route_table.public.id
+}
+
+```
+**If not we need to create route table associations manually as follow:**
+```
+resource "aws_subnet" "public" {
+  count = 3
+  vpc_id     = aws_vpc.main.id
+  cidr_block = element( var.public_cidr_block, count.index)
+}
+```
+In this case, Terraform will create 3 subnets:
+```
+aws_subnet.public[0]: First subnet
+aws_subnet.public[1]: Second subnet
+aws_subnet.public[2]: Third subnet
+```
+Each instance of `aws_subnet.public` has its own `id`, and you can reference each one separately using its index.
+
+**Manual process:**
+```
+resource "aws_route_table_association" "public_association_1" {
+  subnet_id      = aws_subnet.public[0].id  # Refers to the first subnet's ID
+  route_table_id = aws_route_table.public.id
+}
+
+resource "aws_route_table_association" "public_association_2" {
+  subnet_id      = aws_subnet.public[1].id  # Refers to the first subnet's ID
+  route_table_id = aws_route_table.public.id
+}
+
+resource "aws_route_table_association" "public_association_3" {
+  subnet_id      = aws_subnet.public[1].id  # Refers to the first subnet's ID
+  route_table_id = aws_route_table.public.id
+}
+
+
+```
+
+## Local values in terraform:
+
+A local value assigns a name to an expression, so you can use the name multiple times within a module instead of repeating the expression.
+
+## Declaring a Local Value:
+
+A set of related local values can be declared together in a single locals block:
+
+```
+locals {
+    service_name = "forum"
+    owner        = "Community Team"
+}
+```
+
+used as
+
+```
+tags = {
+    owner       = local.owner
+    service_name = local.service_name   
+}
