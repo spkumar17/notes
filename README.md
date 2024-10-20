@@ -607,7 +607,7 @@ The triggers argument ensures that the null_resource is recreated and the provis
 ## Taint:
 
 taint is a command used to mark a resource for recreation during the next terraform apply. When a resource is tainted, Terraform treats it as needing to be replaced, even if its configuration has not changed. This is typically used when a resource is in a bad state or when you want to force the re-execution of provisioners associated with that resource.
-##  **use case:**
+##  **usecase on provisions, taints :**
 
 if we give user data in resource block of ec2 instance every time we modfiy the script instances already created sing that block need's to be deleted and new instaces will created wil updated script.
 
