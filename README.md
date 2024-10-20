@@ -280,11 +280,45 @@ Every time it iterate it will fetch a value from the list of AZ's
 
 The index is zero-based. This function produces an error if used with an empty list. The index must be a non-negative integer.
 
+
+## Terraform Lookup 
+
+The lookup function in Terraform is used to retrieve a value from a map based on a key, and it can also return a default value if the key isn't found.
+
+**Example**
+```
+# Variable definitions
+variable "region" {
+  default = "us-east-1"
+}
+
+variable "ami" {
+  default = {
+    us-east-1 = "ami.isfcinrnci3423"
+    us-east-2 = "ami.isfcinrnci3444343"
+  }
+}
+
+# Lookup function to fetch the AMI ID based on the region
+ami_id = lookup(var.ami, var.region, "ami.default")
+```
+
+## For each:
+n Terraform, for_each is a meta-argument that allows you to iterate over a collection (such as a list, map, or set) to create multiple instances of a resource or nested blocks. It’s commonly used when you want to define multiple resources or blocks dynamically based on the elements in the collection.
+
+
+**for_each with Lists:** Terraform will iterate over each element in a list. The current value in the iteration can be accessed using .value.
+
+**for_each with Maps:** When using a map, the key-value pair of the map is available during the iteration, where .key holds the key and .value holds the associated value.
+
+`for_each = <collection>`  # List or map
+
 ## Splat Function:
 
 splat expression is a shorthand way to extract values from a list or set of resources in Terraform.
 
 **Example:**
+
 
 Let's say you create multiple subnets using the count meta-argument
 ```
@@ -378,7 +412,7 @@ resource "aws_route_table_association" "public_association_3" {
 
 A local value assigns a name to an expression, so you can use the name multiple times within a module instead of repeating the expression.
 
-## Declaring a Local Value:
+#### Declaring a Local Value:
 
 A set of related local values can be declared together in a single locals block:
 
@@ -396,3 +430,203 @@ tags = {
     owner       = local.owner
     service_name = local.service_name   
 }
+```
+
+## Dynamic function:
+
+In Terraform, dynamic blocks provide a way to dynamically generate repeated nested blocks within resource, data, provider, and provisioner blocks. They're commonly used in resource blocks to make your configurations more flexible and follow the "Don't Repeat Yourself" (DRY) principle.
+
+**Basic structure**
+```
+resource "resource_type" "resource_name" {
+  # Resource block configuration
+
+  dynamic "label" {
+    for_each = collection_to_iterate
+    iterator = item
+
+    content {
+      # Content of the dynamically generated block
+    }
+  }
+}
+```
+
+**Example:**
+```
+resource "aws_security_group" "allow_all" {
+  name        = "${var.vpc_name}-allow-all"
+  description = "Allow all Inbound traffic"
+  vpc_id      = aws_vpc.default.id
+
+  # Ingress rule block with dynamic iteration over service_ports
+  dynamic "ingress" {
+    for_each = var.ingress_value
+    content {
+      from_port   = ingress.value  # ingress.value refers to the value of ingress in present iteration
+      to_port     = ingress.value
+      protocol    = "tcp"
+      cidr_blocks = ["0.0.0.0/0"]  # Allow traffic from any IP
+    }
+  }
+
+  # Egress rule block
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]  # Allow outbound traffic to any IP
+  }
+
+  # Tags block
+  tags = {
+    Name        = "${var.vpc_name}-allow-all"
+    Owner       = local.Owner
+    costcenter  = local.costcenter
+    TeamDL      = local.TeamDL
+    environment = var.environment
+  }
+}
+```
+**Explanation:**
+
+ingress is the name of the block that is being dynamically generated.
+
+ingress.value refers to the current value in the iteration, meaning the value from var.ingress_value during the specific iteration.
+
+**Here's a breakdown:**
+
+dynamic "ingress": This tells Terraform to dynamically create ingress blocks.
+
+for_each = var.ingress_value: This iterates over the values of var.ingress_value, which could be a list of port numbers (e.g., [22, 80, 443]).
+
+ingress.value: Inside the content block, ingress.value refers to the current value in the iteration from var.ingress_value. For example, on the first iteration, ingress.value would be 22 (if the list is [22, 80, 443]), on the second iteration, it would be 80, and so on.
+
+**Key Point:**
+
+ingress is just the name of the dynamic block, and .value is the way to access the current value of the item being iterated over.
+So, ingress is the block name you provided in the dynamic block, and ingress.value refers to the value of the current iteration of var.ingress_value.
+
+## Conditional Expressions (ternary operator)
+
+
+In Terraform, conditions allow you to control resource creation, variable values, and expressions based on logic
+
+`condition ? true_value : false_value `
+
+**Use Case:**
+Creating number of instance based on environment
+
+If environment is prod then create 3 instances else create 1 instance
+```
+resource "aws_instance" "private-server" {
+  count                  = var.environment == "Prod" ? 3 : 1
+  ami                    = lookup(var.amis, var.aws_region)
+  instance_type          = "t2.micro"
+  key_name               = var.key_name
+  subnet_id              = element(aws_subnet.private-subnet.*.id, count.index)
+  vpc_security_group_ids = [aws_security_group.allow_all.id]
+}
+```
+### **File provisioner:**
+
+This allow as to copy file from local to remote (CREATED  VM's) then we can use remote exec to run the commands on it.
+```
+provisioner "file" {
+  source      = "user_data.sh"                             # Local file path to copy
+  destination = "/tmp/user_data.sh"                       # Destination path on the remote instance
+
+  connection {
+    type        = "ssh"                                   # Connection type
+    user        = "ubuntu"                                # SSH user for the connection
+    private_key = file("LaptopKey.pem")                   # Path to the SSH private key
+    host        = element(aws_instance.public-servers.*.public_ip, count.index)  # Remote instance's public IP
+  }
+}
+
+```
+
+## **Local Exec:**
+The local-exec provisioner in Terraform allows you to run a command locally on the machine where Terraform is being run. It is useful when you need to execute local scripts, commands, or any other kind of shell commands as part of your Terraform infrastructure management.
+
+**Example of local-exec:**
+
+```
+resource "null_resource" "example" {
+  provisioner "local-exec" {
+    command = "echo 'Hello, World!' > hello.txt"
+  }
+}
+```
+### **Remote-exec:**
+
+The remote-exec provisioner in Terraform allows you to run a command remotely on a machine provisioned by Terraform, such as an EC2 instance. This is useful when you need to execute commands or scripts on the actual instance (or resource) after it is created, to configure it or deploy software.
+
+**Example of remote-exec:**
+
+```
+provisioner "remote-exec" {
+  inline = [
+    "sudo chmod 777 /tmp/userdata.sh",   # Changes permissions to allow execution
+    "sudo /tmp/userdata.sh",               # Executes the script
+    "sudo apt update",                      # Updates the package list
+    "sudo apt install jq unzip -y",        # Installs jq and unzip without prompting for confirmation
+  ]
+
+  connection {
+    type        = "ssh"                    # Uses SSH to connect
+    user        = "ubuntu"                 # User for the connection
+    private_key = file("SecOps-Key.pem")  # Path to the private key for SSH authentication
+    host        = element(aws_instance.public-server.*.public_ip, count.index)  # Host's public IP
+  }
+}
+
+```
+## **Null Resource:**
+The null_resource in Terraform is a placeholder resource that doesn’t represent any actual cloud infrastructure but is used for:
+
+Executing provisioners (like local-exec or remote-exec).
+
+**Example of null_resource:**
+```
+resource "null_resource" "example" {
+  provisioner "local-exec" {
+    command = "echo 'Resource triggered!'"
+  }
+
+  triggers = {
+    resource_id = aws_instance.example.id
+  }
+}
+```
+In this example:
+
+The null_resource doesn’t create any infrastructure, but it will run the local-exec command echo 'Resource triggered!'.
+
+The triggers argument ensures that the null_resource is recreated and the provisioner re-executed whenever the aws_instance.example.id changes.
+## Taint:
+
+taint is a command used to mark a resource for recreation during the next terraform apply. When a resource is tainted, Terraform treats it as needing to be replaced, even if its configuration has not changed. This is typically used when a resource is in a bad state or when you want to force the re-execution of provisioners associated with that resource.
+##  **use case:**
+
+if we give user data in resource block of ec2 instance every time we modfiy the script instances already created sing that block need's to be deleted and new instaces will created wil updated script.
+
+in order to change this we can use null Resource with file provisioner, remote exec and taints to do the operation effectively 
+
+## **Steps:**
+**Create the Instance:** Provision an EC2 instance using the aws_instance resource.
+
+**Use File Provisioner:** Utilize the file provisioner to transfer the user_data.sh script to the EC2 instance.
+
+**Use Remote Exec:** Use the remote-exec provisioner to execute the script on the EC2 instance.
+
+**Use Null Resource Block:** Encapsulate the file transfer and script execution in a null_resource block.
+
+**First Run:** On the first run, you successfully install and run the application with the original user data script.
+
+**Update User Data:** If you modify the user_data.sh script and run terraform apply, Terraform will not recreate the instance because it checks for changes in the instance itself, not in the provisioner scripts.
+
+**Tainting the Resource:** To force the null_resource to run again, you can taint it. it marks the resource as needing to be replaced during the next terraform apply.( it won't remove the state of the resource )
+
+**Run Terraform Apply:** After tainting the null_resource, run terraform apply again. You should see the modified data reflected on the EC2 instance.
+
