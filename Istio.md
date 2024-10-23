@@ -30,6 +30,7 @@ Tools like Service Meshes (e.g., Istio) or observability frameworks help secure,
 * Istio automatically injects a sidecar container called Envoy Proxy into each microservice.
 * When one microservice communicates with another, the request first passes through the Envoy Proxy of the source service and then is routed to the Envoy Proxy of the destination service.
 * Envoy Proxy handles the communication between microservices, making it easier to manage secure, encrypted traffic using TLS (Transport Layer Security).
+![Screenshot](envoy_proxy.png)
 * Istio provides monitoring capabilities by tracking all incoming and outgoing requests through Envoy. This allows for detailed observability of service-to-service communication, including metrics, logging, and distributed tracing.
 * By using Istio, you can implement traffic management rules, enforce security policies, and monitor microservices communication without having to manually configure each service, simplifying the overall operational complexity.
 
