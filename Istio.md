@@ -43,9 +43,11 @@ kubectl label namespace prod istio-injection=enabled
 ```
 This command labels the prod namespace with istio-injection=enabled, which allows Istio to automatically inject Envoy sidecars into the pods created in this namespace.
 
-## Architecture of Istio
+## Istio Architecture
+In the world of microservices, managing service communication is crucial for maintaining performance, security, and observability. This is where Istio, an open-source service mesh, comes into play, providing a powerful way to manage the complexity of microservices architectures.
 
-**Control Plane:**
+##Control Plane:
+----------------
 The control plane is responsible for managing the configuration and policies of the service mesh. The main components include:
 
 **Istiod:** This is the core component that combines the functionalities components like Pilot, Citadel, and Galley. It handles service discovery, traffic management, and security.
@@ -57,7 +59,8 @@ provides service to service and end user authentication out if the box it provid
 
 **Galley:** Galley is Istio's configration validation,ingestion,processing and distribution component. Galley reads Yaml configuration files and converts it to Istio format.
 
-Data Plane:
+## Data Plane:
+------------
 The data plane is where the actual service-to-service communication occurs. Key components include:
 
 **Ingress Traffic:** Manages incoming requests to the services from external sources.
