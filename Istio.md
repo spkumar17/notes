@@ -14,3 +14,13 @@ As the number of microservices grows to 100 or more, the complexity increases si
 **what about routing and discovery** When a new microservice is added to the architecture, it often requires communication with existing microservices, and vice versa. This introduces additional complexity as we need to ensure seamless communication between the new and old services. Each microservice might have dependencies on other services for data or functionality, and as the number of microservices grows, managing these communication paths becomes increasingly difficult.
 
 Without proper tools or automation, handling service discovery, routing, and ensuring secure communication (like using TLS) between services manually becomes highly challenging. As the system scales with more microservices, this complexity can grow exponentially, making it harder to maintain and manage the architecture effectively.
+
+**No proper tracking to troubleshoot the issues related to service to service communication in kubernates by default**
+In a microservices architecture, troubleshooting service-to-service communication can be difficult without proper tools and mechanisms in place.
+Microservices typically communicate over the network, and without observability tools (e.g., logging, distributed tracing, or monitoring), tracking how requests flow between services becomes challenging.
+
+Issues such as latency, failed requests, or security vulnerabilities (e.g., lack of TLS encryption) can go unnoticed without proper monitoring.
+
+The absence of an underlying mechanism to monitor and track service communication makes it difficult to identify and resolve bottlenecks or failures.
+
+Tools like Service Meshes (e.g., Istio) or observability frameworks help secure, monitor, and troubleshoot communication, but manually managing these processes without such tools is operationally complex.
