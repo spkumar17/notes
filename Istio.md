@@ -24,3 +24,11 @@ Issues such as latency, failed requests, or security vulnerabilities (e.g., lack
 The absence of an underlying mechanism to monitor and track service communication makes it difficult to identify and resolve bottlenecks or failures.
 
 Tools like Service Meshes (e.g., Istio) or observability frameworks help secure, monitor, and troubleshoot communication, but manually managing these processes without such tools is operationally complex.
+
+## How Istio Works for Managing Microservices Communication:
+
+* Istio automatically injects a sidecar container called Envoy Proxy into each microservice.
+* When one microservice communicates with another, the request first passes through the Envoy Proxy of the source service and then is routed to the Envoy Proxy of the destination service.
+* Envoy Proxy handles the communication between microservices, making it easier to manage secure, encrypted traffic using TLS (Transport Layer Security).
+* Istio provides monitoring capabilities by tracking all incoming and outgoing requests through Envoy. This allows for detailed observability of service-to-service communication, including metrics, logging, and distributed tracing.
+* By using Istio, you can implement traffic management rules, enforce security policies, and monitor microservices communication without having to manually configure each service, simplifying the overall operational complexity.
