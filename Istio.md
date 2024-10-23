@@ -66,4 +66,4 @@ The data plane is where the actual service-to-service communication occurs. Key 
 
 **Envoy Proxy:** A lightweight proxy deployed alongside each service, handling traffic management, security, and observability features like logging and metrics.
 
-![Screenshot](istio.png)
+![Screenshot](istioarch.png)
