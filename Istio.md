@@ -1,4 +1,4 @@
-# Istio
+                                                        # Istio
 
 **Istio's Purpose:** Istio is a service mesh technology, providing management of service-to-service communications for microservices in a Kubernetes cluster. It handles routing, load balancing, service discovery, security (TLS encryption), and monitoring, among other tasks.
 
