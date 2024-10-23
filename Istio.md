@@ -42,3 +42,28 @@ After installation of instio we need to label the namespace.so, that the namespa
 kubectl label namespace prod istio-injection=enabled
 ```
 This command labels the prod namespace with istio-injection=enabled, which allows Istio to automatically inject Envoy sidecars into the pods created in this namespace.
+
+## Architecture of Istio
+
+**Control Plane:**
+The control plane is responsible for managing the configuration and policies of the service mesh. The main components include:
+
+**Istiod:** This is the core component that combines the functionalities components like Pilot, Citadel, and Galley. It handles service discovery, traffic management, and security.
+
+**Pilot:** Responsible for traffic management,provides service discovery and pushes configuration changes to all the envoy sidecars
+
+**Citadel:** Manages security, including the issuance and rotation of certificates.
+provides service to service and end user authentication out if the box it provides encryption of traffic between proxies using mTLS
+
+**Galley:** Galley is Istio's configration validation,ingestion,processing and distribution component. Galley reads Yaml configuration files and converts it to Istio format.
+
+Data Plane:
+The data plane is where the actual service-to-service communication occurs. Key components include:
+
+**Ingress Traffic:** Manages incoming requests to the services from external sources.
+
+**Egress Traffic:** Handles outgoing requests from the services to external services.
+
+**Envoy Proxy:** A lightweight proxy deployed alongside each service, handling traffic management, security, and observability features like logging and metrics.
+
+![Screenshot](istio.png)
