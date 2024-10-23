@@ -6,8 +6,16 @@
 
 ![Screenshot](k8sarck.png)
 
-**based on aboce chat**
-Managing traffic and communication between services in Kubernetes can become complex, especially when dealing with multiple microservices like a frontend application, backend processing, order management, inventory analysis, and a database microservice. For instance, the frontend needs to communicate with shipping, order processing, and backend services, while these backend services also need to communicate with the database. Manually managing this communication, even with just five or six microservices, can be challenging.
+**based on above**
+Managing traffic and communication between services in Kubernetes can become complex, especially when dealing with multiple microservices like a frontend application, backend processing, order management, inventory analysis, and a database microservice. For instance, the frontend needs to communicate with shipping, order processing, and backend services, while these backend services also need to communicate with the database. Manually managing this communication, even with just five or six microservices, can be challenging when using advanced routing like Let’s say you have 100 microservices. If you want to:
+
+Implement retries, circuit breaking, and timeout logic for each service.
+
+Introduce canary deployments and split traffic between different versions.
+
+Secure communication using mTLS and handle permissions between services.
+
+Get deep visibility into which services are failing or causing bottlenecks.
 
 As the number of microservices grows to 100 or more, the complexity increases significantly. Ensuring reliable communication, handling service discovery, and maintaining TLS encryption for secure communication between services becomes a major concern. Without a service mesh like Istio, managing this level of inter-service communication manually is not scalable and introduces several operational challenges.
 
