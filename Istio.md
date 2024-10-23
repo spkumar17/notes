@@ -35,3 +35,10 @@ Tools like Service Meshes (e.g., Istio) or observability frameworks help secure,
 * By using Istio, you can implement traffic management rules, enforce security policies, and monitor microservices communication without having to manually configure each service, simplifying the overall operational complexity.
 
 ![Screenshot](istio.png)
+
+### How istio start managing?
+After installation of instio we need to label the namespace.so, that the namespace will be part of service-mesh
+```
+kubectl label namespace prod istio-injection=enabled
+```
+This command labels the prod namespace with istio-injection=enabled, which allows Istio to automatically inject Envoy sidecars into the pods created in this namespace.
