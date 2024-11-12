@@ -95,6 +95,9 @@ This task also prints a similar message but is marked as sensitive using no_log:
 
 **when:**
 
+
+In Ansible, the when module is used as a conditional statement to control when a task should run.
+
 * The when condition ensures that this task is only executed when the host is running Ubuntu 24.04.
 
 * ansible_facts['distribution'] == "Ubuntu" checks if the operating system is Ubuntu.
@@ -103,7 +106,7 @@ This task also prints a similar message but is marked as sensitive using no_log:
 
 * If both conditions are true, the task will run; otherwise, it will be skipped.
 
-* This condition uses the facts gathered by Ansible (which comes from gather_facts: yes).
+* This condition uses the facts gathered by Ansible (which comes from **gather_facts: yes**).
 
 **timeout:**
 
@@ -124,3 +127,60 @@ tags: [tools]: Tags allow you to selectively run or skip tasks when executing th
 **All tasks**
 
 `ansible-playbook your_playbook.yml`
+
+
+
+## remote_src
+
+**First Play (without remote_src):**
+```
+    - name: Copy html file
+      copy:
+        src: /tmp/nginxfiles/index.html
+        dest: /var/www/html/index.nginx-debian.html
+        owner: root
+        group: root
+        mode: "0644"
+```
+Without remote_src: Ansible will assume /tmp/nginxfiles/index.html exists on the local machine, and it will copy it to the remote machine.
+
+**Second Play (with remote_src=yes):**
+```
+    - name: Copy the files to index destination folder.
+      copy: >
+        src=/tmp/ansible_testing_page/index.html
+        dest=/var/www/html/index.nginx-debian.html
+        remote_src=yes
+        owner=root
+        group=root
+        mode=0644
+```
+With remote_src=yes: Ansible will look for /tmp/ansible_testing_page/index.html on the remote machine itself, assuming that the file is already there and does not need to be transferred.
+
+Based on the required we need to use this block 
+
+## With_items:
+the with_items block in Ansible is a loop mechanism that allows you to repeat a task multiple times with different values.
+with_items is used to copy multiple files (in this case, HTML files) to a destination directory on the target server.
+
+```
+- name: Copy html file
+  copy:
+    src: "{{ item }}"
+    dest: /var/www/html/{{ item }}
+    owner: root
+    group: root
+    mode: '0644'
+  with_items:
+    - contact.html
+    - orders.html
+    - aboutus.html
+```
+* **src: "{{ item }}":** src is set to "{{ item }}", where item is a placeholder for each item in the with_items list. During each loop iteration, item will be replaced by the current list item (contact.html, orders.html, etc.).
+* **with_items:** This block specifies a list of items (in this case, file names) that will be used as the value for item in each iteration.
+
+* You can also specify the absolute path if the files are in a specific location on your local machine. 
+  
+  For example:
+
+  `src: "/path/to/files/{{ item }}"`
