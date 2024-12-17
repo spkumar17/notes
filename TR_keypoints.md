@@ -1,4 +1,3 @@
-
 # TERRAFORM 
 
 ## IAC
@@ -13,6 +12,7 @@
 * Terraform relies on state files to track the current state of infrastructure resources and compare it to the desired state declared in configuration files. Without a state file, Terraform would not be able to accurately determine the changes needed to align real-world resources with the desired state.
 
 ## PLUGINS
+* Terraform **< 0.13** before 0.13 we need to atomatically install the pugins in provider block but after **> 0.13** version when we run terraform init terraform will atomatically install all the required providers 
 
 * Provider requirements are declared in a **required_providers** block.
 
@@ -65,7 +65,12 @@ resource "mycloud_instance" "example" {
 ```
 * Exact Version: **version = "1.0"** No other versions will be allowed.
 * wild card version: **version = "~> 1.0"** Allows any version ≥ 1.0.0 but < 2.0.0.
-
+```
+terraform {
+  required_version = ">= 1.9.2"
+}
+```
+specifies the minimum version of Terraform required to run the configuration, ensuring compatibility and preventing potential issues that may arise from using older versions.
 * In Terraform, the **alias parameter** is used to create an alternative name for a provider instance. This is especially useful when you need to configure multiple instances of the same provider (for example, multiple AWS regions).
 * The provider plugins are downloaded and stored in the **`.terraform/providers`**  directory within the current working directory. This directory is specifically used by Terraform to manage provider plugins.
 
