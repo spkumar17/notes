@@ -169,3 +169,44 @@ This document provides an overview of commonly used Terraform workspace commands
   ```bash
   terraform workspace new dev
 
+
+### Modules 
+Modules can be stored in several places, depending on use case and preferences
+
+**Local Paths**:Store your modules as a directory in your local filesystem and refer to them using a relative or absolute path.
+
+```
+module "example" {
+  source = "./modules/example-module"
+}
+```
+**Terraform Registry (Public):** Use publicly available modules from the Terraform Registry or publish your own modules for reuse.
+```
+module "vpc" {
+  source  = "terraform-aws-modules/vpc/aws"
+  version = "3.5.0"
+}
+```
+**Private Module Registries:** Use Terraform Cloud or Terraform Enterprise's private module registry.
+```
+module "example" {
+  source = "app.terraform.io/my-organization/my-module/aws"
+  version = "1.0.0"
+}
+```
+If the module source begins with `app.terraform.io`, it is a private module.
+
+### **How to downloaded modules** 
+
+The two Terraform commands used to download and update modules are:
+
+
+
+**terraform init:** This command downloads and updates the required modules for the Terraform configuration. It also sets up the backend for state storage if specified in the configuration.
+
+
+
+**terraform get:** This command is used to download and update modules for a Terraform configuration. It can be used to update specific modules by specifying the module name and version number, or it can be used to update all modules by simply running the command without any arguments.
+
+It's important to note that `terraform init` is typically run automatically when running other Terraform commands, so you may not need to run terraform get separately. However, if you need to update specific modules, running terraform get can be useful.
+
