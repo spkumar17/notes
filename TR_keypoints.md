@@ -8,6 +8,8 @@
 * IaC uses a human-readable configuration language to help you write infrastructure code quickly
 * Terraform is an **immutable, declarative, Infrastructure as Code** provisioning language based on Hashicorp Configuration Language **HCL**, or optionally **JSON**.
 * Terraform is primarily designed for **macOS, FreeBSD, OpenBSD, Linux, Solaris, and Windows**
+* In Terraform, the variable type `float` is not a valid type. Terraform supports variable types such as `string`, `map`, `bool`, and `number`, but not `float`.
+
 ## Points on state file
 * Terraform relies on state files to track the current state of infrastructure resources and compare it to the desired state declared in configuration files. Without a state file, Terraform would not be able to accurately determine the changes needed to align real-world resources with the desired state.
 
@@ -161,6 +163,10 @@ This document provides an overview of commonly used Terraform workspace commands
 | `terraform workspace show`        | Show the current workspace.                                       | `terraform workspace show`                  |
 | `terraform workspace delete`      | Delete a workspace.                                               | `terraform workspace delete dev`            |
 
+
+* Terraform Community (Free) stores the local state for workspaces in a directory called `terraform.tfstate.d/`. This directory structure allows for separate state files for each workspace, making it easier to manage and maintain the state data.
+
+
 ## Explanation of Commands:
 
 ### `terraform workspace new`
@@ -210,3 +216,51 @@ The two Terraform commands used to download and update modules are:
 
 It's important to note that `terraform init` is typically run automatically when running other Terraform commands, so you may not need to run terraform get separately. However, if you need to update specific modules, running terraform get can be useful.
 
+#### **To publish a module on the Terraform Registry, follow these requirements:**
+
+* GitHub: Must be a public repo (for public registry only).
+* Naming: Use terraform-<PROVIDER>-<NAME> format (e.g., terraform-aws-vpc).
+* Description: Add a simple, clear repository description.
+* Structure: Follow the standard module structure.
+* Version Tags: Use semantic version tags (e.g., v1.0.0). only should start with V
+
+## Commands
+
+**terraform init:** Initializes a Terraform working directory.
+
+* Downloads and installs provider plugins (e.g., AWS, Azure, Google Cloud).
+* Configures the backend (e.g., local, remote).
+* Prepares the directory for Terraform commands.
+
+**terraform fmt:** Formats Terraform configuration files.
+(more on styling and readability)
+* Automatically fixes spacing, indentation, and other style issues.
+* Ensures consistent code formatting.
+
+**terraform validate:** Validates the syntax and structure of Terraform files.
+
+* Checks for configuration syntax errors.
+* Verifies provider requirements.
+
+**terraform plan** Previews changes without applying them.
+
+* Compares the current state with your configuration.
+* Displays the resources that will be added, changed, or destroyed.
+* Does not modify any infrastructure.
+
+**terraform apply** Executes the changes required to reach the desired state.
+
+* Applies the configuration changes to the infrastructure.
+* Prompts for confirmation unless the -auto-approve flag is used.
+* Terraform by default provisions 10 resources concurrently during a `terraform apply` command to speed up the provisioning process and reduce the overall time taken.
+
+**terraform destroy** Deletes all resources managed by the Terraform configuration.
+
+* Reads the configuration and destroys all associated resources.
+* Prompts for confirmation unless -auto-approve is specified.
+
+**terraform show** Displays the current state or a state file.
+
+* Displays the current state or a state file.
+
+Vedio on terraform Cloud : https://www.youtube.com/watch?v=w4YPGjAWmDc
