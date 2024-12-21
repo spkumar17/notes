@@ -264,3 +264,9 @@ It's important to note that `terraform init` is typically run automatically when
 * Displays the current state or a state file.
 
 Vedio on terraform Cloud : https://www.youtube.com/watch?v=w4YPGjAWmDc
+
+### Move block:
+
+* **Prevents Resource Recreation:** The moved block helps Terraform understand that a resource has been relocated to a new module or path. This prevents Terraform from destroying and recreating the resource, which could otherwise result in downtime or unwanted changes to the infrastructure.
+* **Maintains State Integrity:** When resources are moved between modules or paths, Terraform needs to update its state file to reflect the changes. The moved block ensures that the state file is updated correctly, keeping the infrastructure's actual state in sync with the configuration.
+* **Smooth Transitions for Refactoring:** When refactoring Terraform code or reorganizing modules, the moved block makes the transition smoother. It allows you to reorganize your infrastructure code without affecting existing resources, helping to keep your infrastructure organized without any disruptions.
