@@ -14,6 +14,7 @@
 * Terraform relies on state files to track the current state of infrastructure resources and compare it to the desired state declared in configuration files. Without a state file, Terraform would not be able to accurately determine the changes needed to align real-world resources with the desired state.
 * To manually unlock the state for a defined configuration in Terraform, you can use the following command: ` terraform force-unlock <LOCK_ID> `
 * The correct prefix string for setting input variables using environment variables in Terraform is TF_VAR. This prefix is recognized by Terraform to assign values to variables.
+* Retrieving credentials from a secure data source like HashiCorp Vault is a recommended practice for managing sensitive information in Terraform. By using Vault, sensitive values are not directly exposed in the configuration files, however, they are still written to the state file.
 
 ## PLUGINS
 * Terraform **< 0.13** before 0.13 we need to atomatically install the pugins in provider block but after **> 0.13** version when we run terraform init terraform will atomatically install all the required providers 
