@@ -133,6 +133,8 @@ HashiCorp recommends using 2 spaces between each nesting level in Terraform code
 * **terraform apply -replace:** When you use the -replace option, Terraform will plan to destroy and recreate the resource (in this case, aws_instance.web). **terraform taint:** Before Terraform 0.13, this command would manually mark a resource for replacement, and the next time terraform apply was run, the tainted resource would be replaced.
 So, terraform taint is now effectively replaced by the -replace flag in Terraform 0.13 and later.
 
+* the `terraform apply --refresh` option can be relevant when addressing configuration drift. Configuration drift occurs when the actual state of resources in the infrastructure diverges from the desired state defined in the Terraform configuration or the state file.
+
 1) **terraform state show** Displays the current state of a specific resource in the Terraform state file.
 
 2) **terraform state mv aws_instance.web aws_instance.new_web** The terraform state mv command moves a resource in the Terraform state, updating the internal tracking of that resource, but it does not make any changes to the actual infrastructure.
