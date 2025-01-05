@@ -106,4 +106,4 @@ Currently configured contexts:
 - `minikube` (Minikube)
 
 
-![Screenshot](kubernetescontext.png)
+![Screenshot](Kubernetescontext.png)
