@@ -72,3 +72,37 @@ kubectl cluster-info
 # View nodes
 kubectl get nodes
 ```
+
+# Kubernetes Context Management Commands
+
+Quick reference guide for managing Kubernetes contexts.
+
+## View Contexts
+
+```bash
+# List all available contexts
+kubectl config get-contexts
+
+# Show current context
+kubectl config current-context
+```
+
+## Switch Contexts
+
+```bash
+# Switch to a different context
+kubectl config use-context <context-name>
+
+# Example:
+kubectl config use-context kind-demo-multinodecluster2
+```
+
+## Available Contexts
+
+Currently configured contexts:
+- `arn:aws:eks:us-east-1:437151017659:cluster/eks-cluster` (EKS)
+- `kind-demo-cluster1` (Kind single-node)
+- `kind-demo-multinodecluster2` (Kind multi-node)
+- `minikube` (Minikube)
+
+
