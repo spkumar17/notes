@@ -67,3 +67,11 @@ tolerations:
 3. Document your taints and node labels
 4. Regularly review and clean up unused taints and labels
 5. Consider using node affinity for more complex node selection scenarios
+
+
+## Feature Comparison
+
+| Feature | Enforces Exclusivity | Flexible Scheduling | Use Case |
+|---------|---------------------|---------------------|-----------|
+| Taints & Tolerations | No | Yes | Use to repel Pods from Nodes unless they tolerate specific conditions, like workloads requiring isolation. |
+| Node Selector | Yes | No | Use to strictly schedule Pods on specific Nodes (e.g., Nodes with special hardware). |
