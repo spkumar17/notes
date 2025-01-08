@@ -23,8 +23,8 @@ Taints and tolerations work together to ensure that pods are not scheduled onto 
 - They allow a node to repel certain pods
 - Consist of a key, value, and effect
 - Common effects:
-  - `NoSchedule`: Pods won't be scheduled on the node
-  - `PreferNoSchedule`: System will try to avoid scheduling pods on the node
+  - `NoSchedule`: Pods won't be scheduled on the node(existing pods will remain same)
+  - `PreferNoSchedule`: System will try to avoid scheduling pods on the node ( not sure it might schedule as well)
   - `NoExecute`: New pods won't be scheduled AND existing pods will be evicted
 
 Example of adding a taint:
