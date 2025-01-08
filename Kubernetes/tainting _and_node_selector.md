@@ -1,5 +1,46 @@
 # Kubernetes Node Assignment Concepts
 
+## Manual Scheduling in Kubernetes
+
+## Overview
+Manual scheduling allows direct pod-to-node assignment by bypassing the Kubernetes scheduler.
+
+## Basic Usage
+Specify the target node using `nodeName`:
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx
+spec:
+  nodeName: node-1    # Direct node assignment
+  containers:
+  - name: nginx
+    image: nginx
+```
+
+## Important Considerations
+
+### Advantages
+- Simple and direct
+- Useful for debugging
+- Good for testing node-specific issues
+
+### Limitations
+- No automatic rescheduling if node fails
+- Bypasses scheduler's load balancing
+- Cannot be changed after pod creation
+- Not recommended for production
+
+### When to Use
+- Testing and development
+- Debugging node-specific issues
+- Special cases requiring fixed node placement
+
+### When to Avoid
+- Production deployments
+- High-availability requirements
+- With ReplicaSets/Deployments
 ## Node Selectors
 Node selectors are the simplest way to constrain which nodes your pod can be scheduled on. You add the `nodeSelector` field to your pod specification and specify key-value pairs. For the pod to be eligible to run on a node, the node must have each of the indicated key-value pairs as labels.
 
