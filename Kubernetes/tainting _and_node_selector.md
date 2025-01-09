@@ -182,3 +182,12 @@ affinity:
 | Weighting Nodes | Not supported | Supported (weight for preferences) |
 | Primary Use Case | Simple, strict node targeting | Advanced and conditional node targeting |
 | Example YAML Size | Small and minimal | Larger, with more configuration options |
+
+## Node Affinity vs Taints and Tolerations
+
+| Aspect | Node Affinity | Taints and Tolerations |
+|--------|---------------|------------------------|
+| Who Defines the Rules? | Rules are defined in the pod specification (labels on nodes) | Rules are defined both on nodes (taints) and pods (tolerations) |
+| Mandatory vs Optional | Affinity can be mandatory (required) or optional (preferred) | Taints strictly repel unless tolerations are specified |
+| Primary Goal | Scheduling pods based on node labels | Preventing pods from running on certain nodes |
+| Conflict Handling | No; pods simply fail to schedule if required affinity is not met | Pods without tolerations are blocked by taints |
