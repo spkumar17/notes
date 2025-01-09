@@ -117,6 +117,58 @@ tolerations:
 | Taints & Tolerations | No | Yes | Use to repel Pods from Nodes unless they tolerate specific conditions, like workloads requiring isolation. |
 | Node Selector | Yes | No | Use to strictly schedule Pods on specific Nodes (e.g., Nodes with special hardware). |
 
+## Node Affinity Notes
+
+### What is Node Affinity?
+Node Affinity is a set of rules used by the Kubernetes scheduler to determine where to place pods. It provides more expressive and flexible ways to define which nodes your pods should run on compared to node selectors.
+
+### Types of Node Affinity
+1. **Required Node Affinity (requiredDuringSchedulingIgnoredDuringExecution)**
+   - Hard requirement that must be met for pod scheduling
+   - Pod will not be scheduled if no node matches the criteria
+   - Similar to nodeSelector but with more expressive syntax
+
+2. **Preferred Node Affinity (preferredDuringSchedulingIgnoredDuringExecution)**
+   - Soft requirement (preference)
+   - Scheduler will try to find matching nodes but will still schedule the pod even if no matches are found
+   - Can specify weight (1-100) to prioritize certain rules
+
+### Common Operators
+- `In`: Label value must match one of the specified values
+- `NotIn`: Label value must not match any of the specified values
+- `Exists`: Label must exist (value doesn't matter)
+- `DoesNotExist`: Label must not exist
+- `Gt`: Greater than
+- `Lt`: Less than
+
+### Basic Example
+```yaml
+affinity:
+  nodeAffinity:
+    requiredDuringSchedulingIgnoredDuringExecution:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: kubernetes.io/e2e-az-name
+          operator: In
+          values:
+          - e2e-az1
+          - e2e-az2
+    preferredDuringSchedulingIgnoredDuringExecution:
+    - weight: 1
+      preference:
+        matchExpressions:
+        - key: disk-type
+          operator: In
+          values:
+          - ssd
+```
+
+### Best Practices
+1. Use required affinity for critical placement requirements
+2. Use preferred affinity for optimization and better resource utilization
+3. Combine multiple rules to create sophisticated scheduling strategies
+4. Consider using weights to balance different preferences
+5. Keep rules simple and maintainable
 
 # Node Selection in Kubernetes: Node Selector vs Node Affinity
 
