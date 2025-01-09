@@ -116,3 +116,17 @@ tolerations:
 |---------|---------------------|---------------------|-----------|
 | Taints & Tolerations | No | Yes | Use to repel Pods from Nodes unless they tolerate specific conditions, like workloads requiring isolation. |
 | Node Selector | Yes | No | Use to strictly schedule Pods on specific Nodes (e.g., Nodes with special hardware). |
+
+
+# Node Selection in Kubernetes: Node Selector vs Node Affinity
+
+| Feature | Node Selector | Node Affinity |
+|---------|--------------|---------------|
+| Definition | Simple mechanism for node selection | Advanced, flexible scheduling rules |
+| Syntax | Simple key-value pairs | Complex expressions with operators |
+| Soft Preferences | Not supported | Supported (preferredDuringScheduling) |
+| Hard Constraints | Only hard constraints | Supported (requiredDuringScheduling) |
+| Complex Rules | No (only exact matches) | Yes (supports In, NotIn, Exists, etc.) |
+| Weighting Nodes | Not supported | Supported (weight for preferences) |
+| Primary Use Case | Simple, strict node targeting | Advanced and conditional node targeting |
+| Example YAML Size | Small and minimal | Larger, with more configuration options |
