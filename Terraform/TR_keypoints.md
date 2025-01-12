@@ -146,7 +146,6 @@ terraform will stop managing the resource if we remove the state of resource fro
 5) **terraform state import** Imports an existing resource into the Terraform state.
 
 
-### Terraform Workspace Commands
 
 
 | **Command**               | **Purpose**                                                      | **Example Usage**                       |
@@ -158,6 +157,7 @@ terraform will stop managing the resource if we remove the state of resource fro
 | `terraform state push`     | Upload a local state file to the remote backend.                 | `terraform state push terraform.tfstate`|
 | `terraform state import`   | Import an existing resource into Terraform's state.              | `terraform state import aws_instance.web i-1234567890abcdef0` |
 
+### Terraform Workspace Commands
 
 This document provides an overview of commonly used Terraform workspace commands and their examples.
 
