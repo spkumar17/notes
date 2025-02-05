@@ -1,7 +1,7 @@
 # Open Container Initiative (OCI)
 
 
-### **Why OCI?***
+### **Why OCI?**
 
 The Open Container Initiative (OCI) came into existence to standardize the container ecosystem and ensure that containers could be used in a portable, secure, and interoperable manner across various tools, platforms, and environments. By defining key specifications (e.g., container image format, runtime, and distribution), OCI has allowed the container ecosystem to flourish and evolve, providing a common language that all participants (vendors, developers, etc.) can adopt.
 
