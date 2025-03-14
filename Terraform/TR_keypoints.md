@@ -10,12 +10,15 @@
 * Terraform is primarily designed for **macOS, FreeBSD, OpenBSD, Linux, Solaris, and Windows**
 * In Terraform, the variable type `float` is not a valid type. Terraform supports variable types such as `string`, `map`, `bool`, and `number`, but not `float`.
 * Terraform enterprise workspaces can store the cloud credentials securely allowing secure access for cloud resources during terraform operations.
-
+* The core Terraform workflow steps involve first writing the infrastructure code using HashiCorp Configuration Language (HCL) or JSON, then planning the changes to understand what Terraform will do, and finally applying those changes to create or update the infrastructure as defined in the code.
 ## Points on state file
 * Terraform relies on state files to track the current state of infrastructure resources and compare it to the desired state declared in configuration files. Without a state file, Terraform would not be able to accurately determine the changes needed to align real-world resources with the desired state.
 * To manually unlock the state for a defined configuration in Terraform, you can use the following command: ` terraform force-unlock <LOCK_ID> `
 * The correct prefix string for setting input variables using environment variables in Terraform is TF_VAR. This prefix is recognized by Terraform to assign values to variables.
 * Retrieving credentials from a secure data source like HashiCorp Vault is a recommended practice for managing sensitive information in Terraform. By using Vault, sensitive values are not directly exposed in the configuration files, however, they are still written to the state file.
+* determine the correct order to delete the resources.
+* map the configuration to Real world resouces.
+* increases performance
 
 ## PLUGINS
 * Terraform **< 0.13** before 0.13 we need to atomatically install the pugins in provider block but after **> 0.13** version when we run terraform init terraform will atomatically install all the required providers 
@@ -135,7 +138,7 @@ So, terraform taint is now effectively replaced by the -replace flag in Terrafor
 
 * the `terraform apply --refresh` option can be relevant when addressing configuration drift. Configuration drift occurs when the actual state of resources in the infrastructure diverges from the desired state defined in the Terraform configuration or the state file.
 
-1) **terraform state show** Displays the current state of a specific resource in the Terraform state file.
+1) **terraform state show** Provides detailed information about a specific resource in the state file..
 
 2) **terraform state mv aws_instance.web aws_instance.new_web** The terraform state mv command moves a resource in the Terraform state, updating the internal tracking of that resource, but it does not make any changes to the actual infrastructure.
 
@@ -146,18 +149,18 @@ terraform will stop managing the resource if we remove the state of resource fro
 5) **terraform state import** Imports an existing resource into the Terraform state.
 
 
-### Terraform Workspace Commands
 
 
 | **Command**               | **Purpose**                                                      | **Example Usage**                       |
 |---------------------------|------------------------------------------------------------------|-----------------------------------------|
-| `terraform state show`     | Display the current state of a resource.                         | `terraform state show aws_instance.web` |
+| `terraform state show`     | Provides detailed information about a specific resource in the state file.                     | `terraform state show aws_instance.web` |
 | `terraform state mv`       | Move a resource within the Terraform state.                      | `terraform state mv aws_instance.web aws_instance.new_web` |
 | `terraform state rm`       | Remove a resource from the state file.                           | `terraform state rm aws_instance.web`   |
 | `terraform state pull`     | Retrieve the current state file from the backend.                | `terraform state pull`                  |
 | `terraform state push`     | Upload a local state file to the remote backend.                 | `terraform state push terraform.tfstate`|
 | `terraform state import`   | Import an existing resource into Terraform's state.              | `terraform state import aws_instance.web i-1234567890abcdef0` |
 
+### Terraform Workspace Commands
 
 This document provides an overview of commonly used Terraform workspace commands and their examples.
 
@@ -265,9 +268,8 @@ It's important to note that `terraform init` is typically run automatically when
 * Reads the configuration and destroys all associated resources.
 * Prompts for confirmation unless -auto-approve is specified.
 
-**terraform show** Displays the current state or a state file.
+**terraform show** The terraform show command is used to provide human-readable output from a state or plan file. 
 
-* Displays the current state or a state file.
 
 Vedio on terraform Cloud : https://www.youtube.com/watch?v=w4YPGjAWmDc
 
