@@ -1,5 +1,21 @@
 # HTTP Status Codes: A Comprehensive Guide with Real-World Examples
 
+## Quick Reference Table
+
+| Status Code | Name | Description | Common Use Case |
+|------------|------|-------------|-----------------|
+| 200 | OK | Successful request with response body | GET requests returning data |
+| 201 | Created | Resource successfully created | POST requests creating new records |
+| 204 | No Content | Successful request with no response body | DELETE operations |
+| 301 | Moved Permanently | Resource permanently relocated | Domain changes |
+| 302 | Found | Resource temporarily relocated | Maintenance redirects |
+| 400 | Bad Request | Invalid client request | Form validation failures |
+| 401 | Unauthorized | Authentication required | Protected API access |
+| 403 | Forbidden | Access denied despite authentication | Non-admin accessing admin area |
+| 404 | Not Found | Resource doesn't exist | Broken links |
+| 500 | Internal Server Error | Server-side failure | Database connection issues |
+| 502 | Bad Gateway | Invalid upstream server response | Microservice failures |
+
 ## Success Status Codes (2xx)
 
 ### 200 OK - Successful Request
