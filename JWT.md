@@ -24,21 +24,24 @@ A JWT looks like this:
 
 ## 🔍 Example Structure
 
-### Header
 ```json
+
+Header
+
 {
   "alg": "HS256",
   "typ": "JWT"
 }
 
-### Payload
+Payload
 
 {
   "user_id": 123,
   "role": "admin"
 }
 
-### Signature
+Signature
+
 HMACSHA256(
   base64urlEncode(header) + "." + base64urlEncode(payload),
   secret
