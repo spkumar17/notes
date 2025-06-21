@@ -364,3 +364,33 @@ You can provision and manage this architecture using:
 │   └── shared/
 ├── backend.tf
 └── README.md
+
+## Best Practice (AWS Landing Zone & Control Tower)
+When using AWS Landing Zone or Control Tower, AWS automatically creates these accounts:
+
+| Account                 | Default Role                          | OU (Recommended)    |
+| ----------------------- | ------------------------------------- | ------------------- |
+| `Log Archive`           | Store all CloudTrail, Config, S3 logs | `Security OU`       |
+| `Audit`                 | Read-only access, security tooling    | `Security OU`       |
+| `Shared Services` (Hub) | Networking, DNS, NAT, etc.            | `Infrastructure OU` |
+| `Dev`, `Test`, `Prod`   | Workload accounts                     | `Workloads OU`      |
+```
+AWS Organizations (Root)
+│
+├── Security OU
+│   ├── log-archive
+│   └── audit
+│
+├── Infrastructure OU
+│   └── shared-services (Hub)
+│
+├── Workloads OU
+│   ├── dev
+│   ├── test
+│   └── prod
+```
+✅ You can manage networking, security, logging, IAM, CI/CD, backups, monitoring, and billing from a central Hub account, while Spoke accounts focus only on workloads.
+
+vpc peering
+AWS control tower--using hub and spoke model
+Resource access manager :https://www.youtube.com/watch?v=I9aKCdLokOs
