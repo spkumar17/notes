@@ -16,17 +16,23 @@ In this model:
 ```plaintext
 AWS Organizations (Root Account)
 │
-├── Shared Services Account (Hub)
-│   ├── Logging
-│   ├── Monitoring
-│   ├── Central Networking (VPC, Transit Gateway)
-│   ├── DNS (Route53)
-│   └── Security Tools (GuardDuty, Config, Security Hub)
+├── Security OU
+│   ├── Log Archive Account
+│   └── Audit Account
 │
-├── Dev Account (Spoke)
-├── Test Account (Spoke)
-├── Prod Account (Spoke)
-└── Analytics Account (Spoke)
+├── Shared Services OU (Hub)
+│   └── Shared Services Account
+│       ├── Logging
+│       ├── Monitoring
+│       ├── Central Networking (VPC, Transit Gateway)
+│       ├── DNS (Route 53)
+│       └── Security Tools (GuardDuty, Config, Security Hub)
+│
+└── Workload OU (Spokes)
+    ├── Dev Account
+    ├── Test Account
+    ├── Prod Account
+
 ```
 
 ---
