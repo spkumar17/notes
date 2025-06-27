@@ -14,24 +14,35 @@ In this model:
 ## 🧱 Structure
 
 ```plaintext
-AWS Organizations (Root Account)
+AWS Organizations
+│
+├── Management Account (Control Tower Management / Billing Account)
 │
 ├── Security OU
 │   ├── Log Archive Account
-│   └── Audit Account
+│   │   └── Stores:
+│   │       - CloudTrail Logs
+│   │       - AWS Config Snapshots
+│   │       - VPC Flow Logs
+│   │
+│   └── Audit Account (Delegated Admin)
+│       ├── AWS Config Aggregator
+│       ├── GuardDuty (central findings)
+│       └── Security Hub (findings from all accounts)
 │
 ├── Shared Services OU (Hub)
 │   └── Shared Services Account
-│       ├── Logging
-│       ├── Monitoring
-│       ├── Central Networking (VPC, Transit Gateway)
-│       ├── DNS (Route 53)
-│       └── Security Tools (GuardDuty, Config, Security Hub)
+│       ├── Central Networking (VPCs, Transit Gateway)
+│       ├── DNS Zones (Route 53)
+│       ├── Shared Monitoring (CloudWatch Dashboards, Alarms)
+│       └── SSM, Artifact/ECR Registries
 │
 └── Workload OU (Spokes)
     ├── Dev Account
     ├── Test Account
     ├── Prod Account
+    └── Analytics Account
+
 
 ```
 
