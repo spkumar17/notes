@@ -83,7 +83,27 @@ specifies the minimum version of Terraform required to run the configuration, en
 * In Terraform, the **alias parameter** is used to create an alternative name for a provider instance. This is especially useful when you need to configure multiple instances of the same provider (for example, multiple AWS regions).
 * The provider plugins are downloaded and stored in the **`.terraform/providers`**  directory within the current working directory. This directory is specifically used by Terraform to manage provider plugins.
 
+```
+provider "aws" {
+  region = "us-east-1"   # default
+}
 
+provider "aws" {
+  alias  = "west"
+  region = "us-west-2"   # second region
+}
+
+resource "aws_s3_bucket" "logs_east" {
+  bucket = "my-logs-east"
+}
+
+resource "aws_s3_bucket" "logs_west" {
+  provider = aws.west
+  bucket   = "my-logs-west"
+}
+
+```
+one bucket on us-east-1 and other on us-west-2
 ### Environment Variables
 
 * **export TF_LOG=trace** ---> to set the log 
