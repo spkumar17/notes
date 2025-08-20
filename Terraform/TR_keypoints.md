@@ -123,8 +123,20 @@ one bucket on us-east-1 and other on us-west-2
 
 **export TF_LOG_PATH=./terraform.log**
 * TF_INPUT is an environment variable in Terraform that controls whether or not Terraform will prompt for user input during execution (if set to false, it disables prompts).
+
+In automation / CI/CD pipelines (like Jenkins, GitHub Actions, GitLab CI, etc.), you don’t want Terraform pausing and waiting for someone to type values.
+So you set:
+
+`export TF_INPUT=false`
+
 * **export TF_WORKSPACE=your_workspace** For multi-environment deployment, in order to select a workspace, instead of doing terraform workspace select your_workspace, it is possible to use this environment variable. Using TF_WORKSPACE allow and override workspace selection.
 
+CI/CD pipelines often set TF_WORKSPACE dynamically:
+```
+export TF_WORKSPACE=$BRANCH_NAME
+terraform init
+terraform apply -auto-approve
+```
 
 ### Scenario based:
 
