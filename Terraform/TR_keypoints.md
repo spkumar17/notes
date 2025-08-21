@@ -9,6 +9,17 @@
 * Terraform is an **immutable, declarative, Infrastructure as Code** provisioning language based on Hashicorp Configuration Language **HCL**, or optionally **JSON**.
 * Terraform is primarily designed for **macOS, FreeBSD, OpenBSD, Linux, Solaris, and Windows**
 * In Terraform, the variable type `float` is not a valid type. Terraform supports variable types such as `string`, `map`, `bool`, and `number`, but not `float`.
+
+list(<TYPE>) → ordered sequence of values (e.g. list(string) = ["a", "b"])
+
+set(<TYPE>) → unordered collection of unique values (e.g. set(number) = [1,2,3])
+
+map(<TYPE>) → key-value pairs (e.g. map(string) = { name = "prasanna", env = "dev" })
+
+object({...}) → a collection of attributes with specific types (like a struct in programming)
+
+tuple([...]) → fixed-length, ordered collection where each element can have a different type (e.g. tuple([string, number, bool]) = ["app", 2, true])
+
 * Terraform enterprise workspaces can store the cloud credentials securely allowing secure access for cloud resources during terraform operations.
 * The core Terraform workflow steps involve first writing the infrastructure code using HashiCorp Configuration Language (HCL) or JSON, then planning the changes to understand what Terraform will do, and finally applying those changes to create or update the infrastructure as defined in the code.
 ## Points on state file
