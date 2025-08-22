@@ -21,6 +21,25 @@ Terraform offers greater flexibility and multi-cloud support compared to cloud-n
 | Dry-Run Capability                | Limited                             | `terraform plan` for effective dry-run |
 | Importing Resources               | Complex in AWS, not available in ARM | Simple with `terraform import` |
 
+**locals variables**
+locals in Terraform let you store values derived from variables, data sources, or expressions so you can reuse them multiple times in a clean, readable way.
+
+They are not the same as input variables — locals are computed values, while variables are inputs from the user or environment.
+
+```
+locals {
+  vpc_id = data.aws_vpcs.tagged_vpcs.ids[0]
+}
+
+data "aws_vpc" "selected_vpc" {
+  id = local.vpc_id
+}
+
+resource "aws_security_group" "vpc_sg" {
+  vpc_id = local.vpc_id
+}
+
+```
 ## Data sources:
 
 Data sources in Terraform is used to fetch information about existing resources, such as VPC IDs, subnet IDs, security group IDs, etc. Once you retrieve this information, you can use it in your Terraform configurations to create or manage other resources.
