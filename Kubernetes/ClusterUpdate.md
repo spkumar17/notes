@@ -281,7 +281,7 @@ kubelet = the agent running on each node, responsible for starting/stopping pods
 
 Version skew = the difference between the Kubernetes version of the control plane (kube-apiserver) and the node agents (kubelets).
 
-## **Starting from Kubernetes 1.28**
+ **Starting from Kubernetes 1.28**
 The kubelet can safely be up to three minor versions older than the kube-apiserver.
 
 **Example:**
@@ -302,7 +302,7 @@ If the kube-apiserver is on version 1.28, the nodes (kubelets) can be on 1.27, 1
 
 **out of Subject**--->Before installing Kubernetes, you need to set up a CNI plugin to enable pod-to-pod networking inside the cluster.
 
-**Update cluster - Using eksctl**
+## **Update cluster - Using eksctl**
 
 This procedure requires eksctl version 0.212.0 or later. You can check your version with the following command:
 
@@ -317,3 +317,84 @@ eksctl upgrade cluster --name <cluster-name> --version <version-number> --approv
 ## **Update cluster components**
 
 After your cluster update is complete, update your nodes to the same Kubernetes minor version as your updated cluster
+
+As we are using Managed node group 
+
+* EKS handles the rolling update of nodes automatically when you update the node group.
+
+* If you are using an EKS-optimized AMI, EKS will automatically apply the latest AMI updates, security patches, and OS updates as part of the update.
+
+* Nodes are recycled one at a time according to your update_config { max_unavailable = 1 }, and Pod Disruption Budgets (PDBs) are respected.
+
+* You only need to update the node group version (Kubernetes or AMI) in Terraform or via eksctl/console, and EKS does the rest.
+
+**Key point:**
+You don’t manually patch or upgrade the AMI for managed node groups — EKS automates that for you.
+
+two main scenarios for upgrading a managed node group with eksctl:
+
+1. Upgrade node group to the latest AMI for the same Kubernetes version
+
+```
+eksctl upgrade nodegroup \
+  --name=node-group-name \
+  --cluster=my-cluster \
+  --region=region-code
+
+```
+This updates nodes to the latest EKS-optimized AMI for their current Kubernetes version.
+
+Useful if you just want OS/security updates without changing the Kubernetes version.
+
+2. Upgrade node group to match a new Kubernetes version
+```
+eksctl upgrade nodegroup \
+  --name=node-group-name \
+  --cluster=my-cluster \
+  --region=region-code \
+  --kubernetes-version=1.33 \
+  --max-unavailable=1
+```
+
+This updates nodes to a newer Kubernetes version (e.g., 1.33).
+
+EKS ensures rolling updates, draining Pods, and respecting Pod Disruption Budgets (if configured).
+
+**For Update strategy, select one of the following options:**
+
+* **Rolling update** – This option respects the Pod disruption budgets for your cluster. Updates fail if there’s a Pod disruption budget issue that causes Amazon EKS to be unable to gracefully drain the Pods that are running on this node group.
+
+* **Force update** – This option doesn’t respect Pod disruption budgets. Updates occur regardless of Pod disruption budget issues by forcing node restarts to occur.
+
+**Notes / Best practices:**
+
+* Control plane first: Always upgrade the cluster control plane before updating nodes.
+
+* Check PDBs: Make sure critical workloads have Pod Disruption Budgets.
+
+* Max unavailable: By default, eksctl will respect safe rolling updates (one node at a time unless specified otherwise).
+
+* Custom AMIs: If you use a custom AMI, you need to create a new launch template version and reference it during the update.
+
+
+
+**Recommended sequence for minimal disruption**
+
+**1) Upgrade the control plane to the desired Kubernetes version.**
+
+* This is the first step because node groups cannot run a higher Kubernetes version than the control plane.
+
+**2) Check and update add-ons/plugins:**
+
+* Amazon VPC CNI → ensures pod networking works correctly with the new Kubernetes version.
+
+* CoreDNS → ensures internal DNS resolution for pods continues to function.
+
+* kube-proxy → ensures proper networking rules on nodes.
+
+**⚡ Why now: If you upgrade nodes first without updating the CNI or CoreDNS, new nodes may have networking or DNS issues because the add-ons might be incompatible with the new Kubernetes version.**
+
+**Upgrade managed node groups (rolling update).**
+* Nodes will get the latest AMI and kubelet version compatible with the upgraded control plane.
+
+* Add-ons are already compatible, so workloads continue running without disruption.
