@@ -250,3 +250,70 @@ It ensures that during voluntary disruptions (like node upgrades, cluster scalin
 * kube-proxy recommended version
 
 6) Upgrade any clients that communicate with the cluster (for example, kubectl).
+
+
+**Step 1: Prepare for upgrade**
+
+Compare the Kubernetes version of your cluster control plane to the Kubernetes version of your nodes.
+
+Get the Kubernetes version of your cluster control plane.
+
+```
+kubectl version
+```
+Get the Kubernetes version of your nodes. This command returns all self-managed and managed Amazon EC2, Fargate, and hybrid nodes. Each Fargate Pod is listed as its own node.
+```
+kubectl get nodes
+```
+Before updating your control plane to a new Kubernetes version, make sure that the Kubernetes minor version of both the managed nodes and Fargate nodes in your cluster are the same as your control plane’s version. For example, if your control plane is running version 1.29 and one of your nodes is running version 1.28, then you must update your nodes to version 1.29 before updating your control plane to 1.30. We also recommend that you update your self-managed nodes and hybrid nodes to the same version as your control plane before updating the control plane. 
+Fargate nodes can’t be upgraded in-place.Delete the pod → it gets recreated on a new node with the correct version.Then upgrade the control plane.After redeploying remaining pods, all pods run on nodes compatible with the new control plane.
+
+
+**Amazon EKS Cluster Insights** automatically scans your cluster for potential issues that could impact Kubernetes version upgrades, such as deprecated APIs or incompatible configurations. The list of checks is periodically updated to reflect changes in Kubernetes and EKS. This helps you identify and fix problems before upgrading, ensuring a smooth and safe cluster upgrade.
+
+**Detailed considerations**
+Assume that your current cluster version is version 1.28 and you want to update it to version 1.30. You must first update your version 1.28 cluster to version 1.29 and then update your version 1.29 cluster to version 1.30.
+
+**Kubernetes Version Skew**
+kube-apiserver = the control plane component that manages the cluster.
+
+kubelet = the agent running on each node, responsible for starting/stopping pods and reporting node/pod status to the control plane.
+
+Version skew = the difference between the Kubernetes version of the control plane (kube-apiserver) and the node agents (kubelets).
+
+## **Starting from Kubernetes 1.28**
+The kubelet can safely be up to three minor versions older than the kube-apiserver.
+
+**Example:**
+kube-apiserver = 1.28
+
+kubelet = 1.25 → compatible
+
+Kubelet version = 1.25
+
+* You can safely upgrade your control plane from 1.25 → 1.26 → 1.27 → 1.28
+
+* Kubelets remain on 1.25 during this time
+
+* This allows control plane upgrades without immediate node upgrades, reducing operational effort and risk.
+
+If the kube-apiserver is on version 1.28, the nodes (kubelets) can be on 1.27, 1.26, or 1.25, since nodes are supported to be up to 3 minor versions older than the control plane, but never newer.
+**Best practice is to keep the kubelet (node version) and the kube-apiserver (control plane version) on the same version to avoid compatibility issues and unexpected behavior, even though Kubernetes allows a minor version skew (control plane can be newer).**
+
+**out of Subject**--->Before installing Kubernetes, you need to set up a CNI plugin to enable pod-to-pod networking inside the cluster.
+
+**Update cluster - Using eksctl**
+
+This procedure requires eksctl version 0.212.0 or later. You can check your version with the following command:
+
+```
+eksctl version
+```
+Update the Kubernetes version of your Amazon EKS control plane. Replace <cluster-name> with your cluster name. Replace <version-number> with the Amazon EKS supported version number that you want to update your cluster to
+```
+eksctl upgrade cluster --name <cluster-name> --version <version-number> --approve
+```
+
+## **Update cluster components**
+
+After your cluster update is complete, update your nodes to the same Kubernetes minor version as your updated cluster
