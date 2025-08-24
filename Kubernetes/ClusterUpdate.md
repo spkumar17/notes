@@ -390,6 +390,7 @@ EKS ensures rolling updates, draining Pods, and respecting Pod Disruption Budget
 ## Official AWS Documentation
 - [Updating an Amazon EKS add-on](https://docs.aws.amazon.com/eks/latest/userguide/updating-an-add-on.html)  
 - [Available Amazon EKS add-ons](https://docs.aws.amazon.com/eks/latest/userguide/workloads-add-ons-available-eks.html)  
+- [Update Amazon EKS](https://www.youtube.com/redirect?event=video_description&redir_token=QUFFLUhqa0tzVWdneWtMYzQ2NkdUUnJWOUQyNVNQWXJlUXxBQ3Jtc0tuckowWjF1YVVzM3g0Q3QzR2V3ZklHX3hBTVhsS25Kb3g4WndKQngwVjZsbDlKNGF0cTF2RTVycjFyYmlGNUY4SWpiemRVTW1rQm9iM3dGVjJJRnkyYkJJU0RiVUhMX0MteTlydFFMMks2X0QwYndNSQ&q=https%3A%2F%2Fdocs.aws.amazon.com%2Feks%2Flatest%2Fuserguide%2Fupdate-cluster.html&v=Cfznp8jRh7I)
 
 
 * Amazon VPC CNI → ensures pod networking works correctly with the new Kubernetes version.
