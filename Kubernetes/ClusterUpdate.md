@@ -386,6 +386,12 @@ EKS ensures rolling updates, draining Pods, and respecting Pod Disruption Budget
 
 **2) Check and update add-ons/plugins:**
 
+
+## Official AWS Documentation
+- [Updating an Amazon EKS add-on](https://docs.aws.amazon.com/eks/latest/userguide/updating-an-add-on.html)  
+- [Available Amazon EKS add-ons](https://docs.aws.amazon.com/eks/latest/userguide/workloads-add-ons-available-eks.html)  
+
+
 * Amazon VPC CNI → ensures pod networking works correctly with the new Kubernetes version.
 
 * CoreDNS → ensures internal DNS resolution for pods continues to function.
