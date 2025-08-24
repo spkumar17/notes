@@ -380,6 +380,8 @@ EKS ensures rolling updates, draining Pods, and respecting Pod Disruption Budget
 
 **Recommended sequence for minimal disruption**
 
+**First Cordan the node** make the node unschedulable 
+
 **1) Upgrade the control plane to the desired Kubernetes version.**
 
 * This is the first step because node groups cannot run a higher Kubernetes version than the control plane.
