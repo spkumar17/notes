@@ -366,6 +366,50 @@ EKS ensures rolling updates, draining Pods, and respecting Pod Disruption Budget
 
 * **Force update** – This option doesn’t respect Pod disruption budgets. Updates occur regardless of Pod disruption budget issues by forcing node restarts to occur.
 
+
+**Handling API Version Changes in Kubernetes During Cluster Updates**
+
+**Why API Versions Change?**
+
+* Kubernetes deprecates old APIs and introduces new stable APIs.
+
+Example: extensions/v1beta1 → networking.k8s.io/v1 (for Ingress).
+
+**Impact**
+
+If manifests still use old APIs after they’re removed, deployments will fail.
+
+**Best Practice**
+
+Check API versions before upgrading cluster:
+```
+kubectl get deployment <name> -o yaml | grep apiVersion
+```
+
+**Or use kubectl deprecations plugin.**
+
+* Update manifests to the supported API versions.
+
+Apply updated manifests → Kubernetes performs a rolling update, ensuring zero downtime.
+
+Old pods run until new pods (with updated API) become ready.
+
+**Example**
+
+Old Ingress:
+```
+apiVersion: extensions/v1beta1
+```
+
+New Ingress:
+```
+apiVersion: networking.k8s.io/v1
+```
+
+When reapplied, rolling update replaces old objects gradually.
+
+**✅ This ensures workloads stay online while upgrading clusters & API versions.**
+
 **Notes / Best practices:**
 
 * Control plane first: Always upgrade the cluster control plane before updating nodes.
