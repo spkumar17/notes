@@ -149,9 +149,10 @@ terraform init
 terraform apply -auto-approve
 ```
 
-### Scenario based:
 
-1) When multiple arguments with single-line values appear on consecutive lines at the same nesting level, HashiCorp recommends that you:
+**1) When multiple arguments with single-line values appear on consecutive lines at the same nesting level, HashiCorp recommends:**
+
+HashiCorp recommends aligning the equals signs for better readability and consistency in the code. This helps in quickly identifying and understanding the key-value pairs in the configuration.
 
 ```
 ami = var.aws_ami
@@ -167,11 +168,9 @@ align the equals signs
 ami           = "abc123" 
 instance_type = "t2.micro"
 ```
-HashiCorp recommends aligning the equals signs for better readability and consistency in the code. This helps in quickly identifying and understanding the key-value pairs in the configuration.
 
-2) When writing Terraform code, how many spaces between each nesting level does HashiCorp recommend that you use?
+**2) When writing Terraform code, how many spaces between each nesting level does HashiCorp recommend that you use?**
 
-2 
 HashiCorp recommends using 2 spaces between each nesting level in Terraform code for better readability and maintainability.
 
 ### More on commands:
