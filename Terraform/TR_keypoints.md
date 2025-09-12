@@ -31,7 +31,7 @@ tuple([...]) → fixed-length, ordered collection where each element can have a 
 * map the configuration to Real world resouces.
 * increases performance
 
-## provider declaration 
+## Provider declaration 
 * Terraform **< 0.13** before 0.13 we need to manually install the pugins in provider block but after **> 0.13** version when we run terraform init terraform will automatically install all the required providers 
 
 * Provider requirements are declared in a **required_providers** block.
