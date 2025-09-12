@@ -337,3 +337,20 @@ module "consul" {
   servers = 3
 }
 ```
+
+
+**When Margaret specifies the version (e.g., version = "0.0.5"):**
+
+Terraform locks the module to that specific version. During terraform init, it always downloads exactly that version.
+
+**If she removes the version parameter and runs terraform init again:**
+
+Terraform will not know which version to pin. Instead, it will pull the latest available version of that module from the registry (at that moment).
+
+* If a newer version (say 0.1.2) exists, Terraform will download and use it.
+* This could introduce breaking changes or different behavior in the infrastructure code.
+
+**Terraform Lock File (.terraform.lock.hcl):**
+
+If the lock file already exists from the previous init, Terraform may still use the previously selected version (until you run terraform init -upgrade).
+But generally, without the version argument, you are effectively saying “give me the latest version”.
