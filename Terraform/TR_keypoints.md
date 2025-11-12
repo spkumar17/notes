@@ -17,6 +17,16 @@ set(<TYPE>) → unordered collection of unique values (e.g. set(number) = [1,2,3
 map(<TYPE>) → key-value pairs (e.g. map(string) = { name = "prasanna", env = "dev" })
 
 object({...}) → a collection of attributes with specific types (like a struct in programming)
+```
+object({
+  name = string
+  id   = number
+  prod = bool
+})
+valid value:
+
+{ name = "app", id = 1, prod = true }
+```
 
 tuple([...]) → fixed-length, ordered collection where each element can have a different type (e.g. tuple([string, number, bool]) = ["app", 2, true])
 
