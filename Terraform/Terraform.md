@@ -318,7 +318,10 @@ variable "ami" {
 }
 
 # Lookup function to fetch the AMI ID based on the region
-ami_id = lookup(var.ami, var.region, "ami.default")
+
+ami_id = lookup(var.ami, var.region) # if key not found throws an error:
+
+ami_id = lookup(var.ami, var.region, "ami.default") # if key not found returns default value
 ```
 
 ## For each:
