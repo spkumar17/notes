@@ -198,7 +198,9 @@ So, terraform taint is now effectively replaced by the -replace flag in Terrafor
 4) **terraform state rm** this will remove the resource from the state file with out effecting the infrastructure
 terraform will stop managing the resource if we remove the state of resource from the state file
 
-5) **terraform state import** Imports an existing resource into the Terraform state.
+5) **terraform import** Imports an existing resource into the Terraform state.
+`terraform import`--->Import an existing resource into Terraform's state.      ---->         `terraform import aws_instance.web i-1234567890abcdef0` 
+
 
 
 
@@ -210,7 +212,7 @@ terraform will stop managing the resource if we remove the state of resource fro
 | `terraform state rm`       | Remove a resource from the state file.                           | `terraform state rm aws_instance.web`   |
 | `terraform state pull`     | Retrieve the current state file from the backend.                | `terraform state pull`                  |
 | `terraform state push`     | Upload a local state file to the remote backend.                 | `terraform state push terraform.tfstate`|
-| `terraform state import`   | Import an existing resource into Terraform's state.              | `terraform state import aws_instance.web i-1234567890abcdef0` |
+
 
 ### Terraform Workspace Commands
 
