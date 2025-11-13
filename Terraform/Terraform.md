@@ -334,6 +334,46 @@ n Terraform, for_each is a meta-argument that allows you to iterate over a colle
 
 `for_each = <collection>`  # List or map
 
+```
+resource "aws_instance" "example" {
+  for_each      = var.servers
+  ami           = "ami-0c55b159cbfafe1f0"
+  instance_type = each.value
+
+  tags = {
+    Name        = "${each.key}-instance"
+    Environment = each.key
+  }
+}
+
+resource "aws_instance" "example" {
+  for_each      = var.servers
+  ami           = "ami-0c55b159cbfafe1f0"
+  instance_type = each.value
+
+  tags = {
+    Name        = "${each.key}-instance"
+    Environment = each.key
+  }
+}
+
+aws_instance.example["dev"]
+aws_instance.example["stage"]
+aws_instance.example["prod"]
+```
+## For in
+```
+
+locals {
+  instance_names = [
+    for env, type in var.servers : "${env}-instance"
+  ]
+}
+
+["dev-instance", "stage-instance", "prod-instance"]
+
+```
+
 ## Splat Function:
 
 splat expression is a shorthand way to extract values from a list or set of resources in Terraform.
